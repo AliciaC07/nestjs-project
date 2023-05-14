@@ -6,10 +6,15 @@ import {UserBcrytp} from "../user/user.bcrytp";
 import {JwtModule} from "@nestjs/jwt";
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import {AppModule} from "../app.module";
+import {APP_GUARD} from "@nestjs/core";
+import {AuthGuard} from "./auth.guard";
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, UserBcrytp],
+  providers: [AuthService, UserBcrytp,{
+      provide: APP_GUARD,
+      useClass:AuthGuard
+  }],
   imports: [UserModule,
       JwtModule.registerAsync({
           imports:[ConfigModule],
@@ -25,4 +30,5 @@ import {AppModule} from "../app.module";
   })],
   exports: [UserBcrytp]
 })
-export class AuthModule {}
+export class AuthModule {
+}

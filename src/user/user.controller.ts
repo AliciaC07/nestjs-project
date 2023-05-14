@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {ApiTags} from "@nestjs/swagger";
+import {Public} from "../auth/auth.guard";
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -14,6 +15,7 @@ export class UserController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.userService.findAll();
   }
