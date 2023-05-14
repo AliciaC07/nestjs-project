@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import {Injectable} from '@nestjs/common';
+import {CreateUserDto} from './dto/create-user.dto';
+import {UpdateUserDto} from './dto/update-user.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {User} from "./entities/user.entity";
 import {Repository} from "typeorm";
-import {bcryptAuth} from "../auth/auth.bcrypt";
+import {UserBcrytp} from "./user.bcrytp";
 
 
 @Injectable()
@@ -12,12 +12,11 @@ export class UserService {
   constructor(
       @InjectRepository(User)
   private usersRepository: Repository<User>,
+      private bcrypt : UserBcrytp,
       )
   {}
   create(createUserDto: CreateUserDto) {
-    // const password = this.encrypt.encrypt(createUserDto.password);
-    // console.log('Encrypt:',password);
-    // createUserDto.password = password;
+    createUserDto.password = this.bcrypt.hashPassword(createUserDto.password);
     const newUser = this.usersRepository.create(createUserDto);
     return this.usersRepository.save(newUser);
   }
